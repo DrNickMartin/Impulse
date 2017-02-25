@@ -1,0 +1,27 @@
+{
+  "name": "impulse",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "watch": "watchify --debug ./public/javascripts/main.js -o ./public/javascripts/bundle.js -v",
+    "start": "nodemon ./bin/www",
+    "start:dev": "concurrently --kill-others \"npm run watch\" \"npm run start\""
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "browserify-shim": "^3.8.13",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.0",
+    "express": "~4.14.1",
+    "jade": "~1.11.0",
+    "morgan": "~1.7.0",
+    "nconf": "^0.8.4",
+    "nunjucks": "^3.0.0",
+    "serve-favicon": "~2.3.2",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "watchify": "^3.9.0"
+  }
+}
