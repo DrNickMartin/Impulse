@@ -1,23 +1,28 @@
 var Vector2 = require('./vector2.js');
 
+function getRandomInt(min,max) {
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+
 module.exports = class Terrain {
-  constructor() {
-    this.image = new Image();
-    this.image.src = './images/terrain.png';
+  constructor(pos, img) {
+    this.image = img;
     this.size = new Vector2(50,50);
+    this.position = pos;
+    this.frame = getRandomInt(0,3);
   }
 
   draw(canvas) {
     canvas.drawImage(
       this.image,
-      this.size.x/2-canvas.canvas.width/2,
-      this.size.y/2-canvas.canvas.height/2,
-      canvas.canvas.width,
-      canvas.canvas.height,
+      this.size.x*this.frame,
       0,
-      0,
-      canvas.canvas.width,
-      canvas.canvas.height
+      this.size.x,
+      this.size.y,
+      this.position.x,
+      this.position.y,
+      this.size.x,
+      this.size.y
     );
   }
 

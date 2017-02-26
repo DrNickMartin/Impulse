@@ -14,9 +14,6 @@ module.exports = function key_bind(ship) {
       case 39: //right
         ship.rotate_right = true;
         break;
-      case 40: //down
-        ship.tractor = true;
-        break;
       default: return;
     }
     e.preventDefault();
@@ -33,9 +30,16 @@ module.exports = function key_bind(ship) {
       case 39: //right
         ship.rotate_right = false;
         break;
-        case 40: //down
-          ship.tractor = false;
-          break;
+      default: return;
+    }
+    e.preventDefault();
+  });
+
+  $(document).keypress(function(e){
+    switch(e.which) {
+      case 32: //space
+        ship.fire();
+        break;
       default: return;
     }
     e.preventDefault();

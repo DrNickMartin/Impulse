@@ -4,6 +4,7 @@
 var globals = require('./globals.js');
 var Vector2 = require('./vector2.js');
 var Sprite = require('./sprite.js');
+var Bullet = require('./bullet.js');
 
 var ship = class Ship {
   constructor(x, y) {
@@ -17,7 +18,8 @@ var ship = class Ship {
     this.rotate_right = false;
     this.tractor = false;
     this.mass = 300;
-    this.tractor_length = 70;
+    this.bullets= [];
+    this.firepower = 100;
 
     var image = new Image();
     image.src = './images/spaceship.png';
@@ -26,6 +28,18 @@ var ship = class Ship {
       "image": image,
       "frame_width": 280
     });
+  }
+
+  fire() {
+    var bullet_vel = new Vector2(
+      Math.sin(this.direction)*this.firepower+this.velocity.x,
+      Math.cos(this.direction)*this.firepower+this.velocity.y
+    );
+    var bullet_pos = new Vector2(
+      this.position.x,
+      this.position.y
+    );
+    this.bullets.push(new Bullet(bullet_pos, bullet_vel));
   }
 
   isAlive() {
@@ -44,23 +58,11 @@ var ship = class Ship {
     }
   }
 
-  tractorPoint() {
-    return new Vector2(this.position.x,this.position.y+this.tractor_length);
-  }
-
   draw(canvas) {
-    // draw tractor
-    if (this.tractor===true) {
-      var tp = this.tractorPoint();
-      canvas.beginPath();
-      canvas.moveTo(this.position.x,this.position.y);
-      canvas.lineTo(tp.x,tp.y);
-      canvas.strokeStyle = '#ff0000';
-      canvas.lineWidth = 2;
-      canvas.stroke();
-    }
-    // draw ship
     this.sprite.render(canvas,this);
+    this.bullets.forEach(bullet => {
+      bullet.draw(canvas);
+    });
   }
 
   getAcceleration() {
@@ -90,6 +92,12 @@ var ship = class Ship {
     this.velocity.x += a.x*dt;
     this.position.y -= this.velocity.y*dt;
     this.position.x += this.velocity.x*dt;
+    this.bullets = this.bullets.filter(item => {
+      return item.life > 0;
+    });
+    this.bullets.forEach(bullet => {
+      bullet.update(dt);
+    });
   }
 
 }

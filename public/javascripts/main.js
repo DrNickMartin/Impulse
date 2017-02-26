@@ -4,6 +4,9 @@ var Ship = require('./ship.js');
 var key_bind = require('./key_bindings.js');
 var Background = require('./background.js');
 var ImageCache = require('./image_cache.js');
+var Terrain = require('./terrain.js');
+var $ = require('jquery');
+var Vector2 = require('./vector2.js');
 var request;
 
 var canvas = document.getElementById("game_window").getContext('2d');
@@ -15,6 +18,14 @@ var bground = new Background();
 var terr_img = new ImageCache('./images/terrain.png');
 var t0 = undefined;
 var dt;
+var terrainElements = [];
+var enemyElements = [];
+
+$.getJSON('./level_data/level01.json',json => {
+  json.terrain.forEach(obj => {
+    terrainElements.push(new Terrain(new Vector2(obj.x,obj.y),terr_img.image));
+  });
+});
 
 ship = key_bind(ship);
 
@@ -46,6 +57,9 @@ function update(dt) {
 function draw() {
   canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
   bground.draw(canvas);
+  terrainElements.forEach(ele => {
+    ele.draw(canvas);
+  });
   ship.draw(canvas);
 }
 
