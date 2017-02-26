@@ -1,8 +1,9 @@
 // Main entry point for game code
 var globals = require('./globals.js');
 var Ship = require('./ship.js');
-var key_bind = require('./key_bindings.js')
-var Background = require('./background.js')
+var key_bind = require('./key_bindings.js');
+var Background = require('./background.js');
+var ImageCache = require('./image_cache.js');
 var request;
 
 var canvas = document.getElementById("game_window").getContext('2d');
@@ -11,6 +12,7 @@ canvas.canvas.height = globals.canvas_height;
 document.getElementById("start").addEventListener("click", animloop);
 var ship = new Ship(canvas.canvas.width/2,canvas.canvas.height/2);
 var bground = new Background();
+var terr_img = new ImageCache('./images/terrain.png');
 var t0 = undefined;
 var dt;
 
