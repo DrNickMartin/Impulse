@@ -15,7 +15,9 @@ var ship = class Ship {
     this.thrust = false;
     this.rotate_left = false;
     this.rotate_right = false;
+    this.tractor = false;
     this.mass = 300;
+    this.tractor_length = 70;
 
     var image = new Image();
     image.src = './images/spaceship.png';
@@ -26,6 +28,14 @@ var ship = class Ship {
     });
   }
 
+  isAlive() {
+    if(this.position.x+this.size.x/2<0) {return false;}
+    if(this.position.x-this.size.x/2>globals.canvas_width) {return false;}
+    if(this.position.y-this.size.y/2>globals.canvas_heiht) {return false;}
+    if(this.position.y+this.size.y/2<0) {return false;}
+    return true;
+  }
+
   frame() {
     if (this.thrust==true) {
       return 1;
@@ -34,7 +44,22 @@ var ship = class Ship {
     }
   }
 
+  tractorPoint() {
+    return new Vector2(this.position.x,this.position.y+this.tractor_length);
+  }
+
   draw(canvas) {
+    // draw tractor
+    if (this.tractor===true) {
+      var tp = this.tractorPoint();
+      canvas.beginPath();
+      canvas.moveTo(this.position.x,this.position.y);
+      canvas.lineTo(tp.x,tp.y);
+      canvas.strokeStyle = '#ff0000';
+      canvas.lineWidth = 2;
+      canvas.stroke();
+    }
+    // draw ship
     this.sprite.render(canvas,this);
   }
 
