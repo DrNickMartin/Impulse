@@ -4,7 +4,7 @@ module.exports = class Bullet {
   constructor(pos,vel) {
     this.position = pos;
     this.velocity = vel;
-    this.life = 90; // number of timesteps until death
+    this.life = 120; // number of timesteps until death
   }
 
   update(dt) {

@@ -20,6 +20,7 @@ var ship = class Ship {
     this.mass = 300;
     this.bullets= [];
     this.firepower = 100;
+    this.isAlive = true;
 
     var image = new Image();
     image.src = './images/spaceship.png';
@@ -42,12 +43,11 @@ var ship = class Ship {
     this.bullets.push(new Bullet(bullet_pos, bullet_vel));
   }
 
-  isAlive() {
-    if(this.position.x+this.size.x/2<0) {return false;}
-    if(this.position.x-this.size.x/2>globals.canvas_width) {return false;}
-    if(this.position.y-this.size.y/2>globals.canvas_heiht) {return false;}
-    if(this.position.y+this.size.y/2<0) {return false;}
-    return true;
+  checkInBounds() {
+    if(this.position.x+this.size.x/2<0) { this.isAlive = false; }
+    if(this.position.x-this.size.x/2>globals.canvas_width) { this.isAlive = false; }
+    if(this.position.y-this.size.y/2>globals.canvas_heiht) { this.isAlive = false; }
+    if(this.position.y+this.size.y/2<0) { this.isAlive = false; }
   }
 
   frame() {
@@ -77,6 +77,24 @@ var ship = class Ship {
     return new Vector2(Fx/this.mass,Fy/this.mass);
   }
 
+  checkCollision(enemies,terrain) {
+    terrain.forEach(obj => {
+      if (
+        this.position.x < obj.position.x + obj.size.x &&
+        this.position.x + this.size.x > obj.position.x &&
+        this.position.y < obj.position.y + obj.size.y &&
+        this.size.x + this.position.y > obj.position.y) { this.isAlive = false; }
+    });
+    enemies.forEach(obj => {
+      if (
+        this.position.x < obj.position.x + obj.size.x &&
+        this.position.x + this.size.x > obj.position.x &&
+        this.position.y < obj.position.y + obj.size.y &&
+        this.size.x + this.position.y > obj.position.y) { this.isAlive = false; }
+    });
+    return false;
+  }
+
   rotate() {
     if (this.rotate_left) {
       this.direction -= 0.1;
@@ -86,18 +104,22 @@ var ship = class Ship {
   }
 
   update(dt) {
-    this.rotate();
-    var a = this.getAcceleration();
-    this.velocity.y += a.y*dt;
-    this.velocity.x += a.x*dt;
-    this.position.y -= this.velocity.y*dt;
-    this.position.x += this.velocity.x*dt;
-    this.bullets = this.bullets.filter(item => {
-      return item.life > 0;
-    });
-    this.bullets.forEach(bullet => {
-      bullet.update(dt);
-    });
+    if (this.isAlive) {
+      this.rotate();
+      var a = this.getAcceleration();
+      this.velocity.y += a.y*dt;
+      this.velocity.x += a.x*dt;
+      this.position.y -= this.velocity.y*dt;
+      this.position.x += this.velocity.x*dt;
+      this.bullets = this.bullets.filter(item => {
+        return item.life > 0;
+      });
+      this.bullets.forEach(bullet => {
+        bullet.update(dt);
+      });
+    } else{
+      this.bullets.forEach(bullet => { bullet.life = 0; });
+    }
   }
 
 }

@@ -8,12 +8,16 @@ var Terrain = require('./terrain.js');
 var Enemy = require('./enemy.js');
 var $ = require('jquery');
 var Vector2 = require('./vector2.js');
-var request;
+var game_over = false;
 
 var canvas = document.getElementById("game_window").getContext('2d');
 canvas.canvas.width = globals.canvas_width;
 canvas.canvas.height = globals.canvas_height;
-document.getElementById("start").addEventListener("click", animloop);
+
+var start_button = document.getElementById("start");
+start_button.addEventListener("click", animloop);
+start_button.disabled = false;
+
 var ship = new Ship(canvas.canvas.width/2,canvas.canvas.height/2);
 var bground = new Background();
 var terr_img = new ImageCache('./images/terrain.png');
@@ -24,7 +28,7 @@ var enemyElements = [];
 
 $.getJSON('./level_data/level01.json',json => {
   json.terrain.forEach(obj => {
-    terrainElements.push(new Terrain(new Vector2(obj.x,obj.y),terr_img.image));
+    terrainElements.push(new Terrain(new Vector2(parseInt(obj.x),parseInt(obj.y)),terr_img.image));
   });
 });
 
@@ -38,10 +42,6 @@ window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame
 })();
 
-window.cancelRequestAnimFrame = ( function() {
-    return window.cancelAnimationFrame
-})();
-
 function render(t1) {
   t1 = Date.now()/1000;
   if(t0==undefined) { t0=t1; }
@@ -52,15 +52,14 @@ function render(t1) {
 }
 
 function update(dt) {
-  if(!ship.isAlive()){
-    cancelRequestAnimFrame(request);
-    location.reload(true);
-  }
   enemyElements.forEach(ele => {
     ele.updateDirection(ship);
     ele.update(dt);
   });
   ship.update(dt);
+  ship.checkInBounds();
+  ship.checkCollision(enemyElements,terrainElements);
+  if (!ship.isAlive) { game_over = true; }
 }
 
 function draw() {
@@ -75,7 +74,21 @@ function draw() {
   ship.draw(canvas);
 }
 
+function endGame(canvas) {
+  canvas.font = "80px Impact";
+  canvas.fillStyle = '#fff000';
+  canvas.textAlign = "center";
+  canvas.fillText("Game Over",canvas.canvas.width/2,canvas.canvas.height/2);
+}
+
 function animloop(){
+  if (game_over) {
+    endGame(canvas);
+    return;
+  }
+  if (!start_button.disabled) {
+    start_button.disabled = true;
+  }
   render();
-  request = requestAnimFrame(animloop);
+  requestAnimFrame(animloop);
 };
