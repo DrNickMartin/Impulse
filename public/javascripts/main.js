@@ -1,19 +1,38 @@
-var canvas = document.getElementById("game_window").getContext('2d');
-
+// Main entry point for game code
 var globals = require('./globals.js');
 var Ship = require('./ship.js');
+var key_bind = require('./key_bindings.js')
+
+var canvas = document.getElementById("game_window").getContext('2d');
 var ship = new Ship();
+var t0 = undefined;
+var dt;
 
-setInterval(function() {
-  update();
+ship = key_bind(ship);
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame
+})();
+
+function render(t1) {
+  t1 = Date.now()/1000;
+  if(t0==undefined) { t0=t1; }
+  dt = (t1-t0);
+  t0 = t1;
+  update(dt);
   draw();
-}, globals.dtms);
+}
 
-function update() {
-  ship.update();
+function update(dt) {
+  ship.update(dt);
 }
 
 function draw() {
   canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
   ship.draw(canvas);
 }
+
+(function animloop(){
+  render();
+  requestAnimFrame(animloop);
+})();

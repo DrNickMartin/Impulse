@@ -5,6 +5,7 @@ class Globals {
     this.dt = 1/this.FPS;
     this.dtms = 1000/this.FPS;
     this.g = 9.81;
+    this.thrust = 50;
   }
 }
 

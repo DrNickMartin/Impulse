@@ -3,34 +3,68 @@
 
 var globals = require('./globals.js');
 var Vector2 = require('./vector2.js');
+var Sprite = require('./sprite.js');
 
 var ship = class Ship {
   constructor() {
-    this.size = new Vector2(20,25);
+    this.size = new Vector2(25,50);
     this.position = new Vector2(50,50);
     this.velocity = new Vector2(0,20);
-    this.diretion = new Vector2(0,1);
+    this.direction = 0; //Angle we're facing in radians
     this.color = '#00A';
     this.thrust = false;
-    this.mass = 200;
-    this.t_force = 2*globals.g;
+    this.rotate_left = false;
+    this.rotate_right = false;
+    this.mass = 300;
+
+    var image = new Image();
+    image.src = './images/spaceship.png';
+    this.sprite = new Sprite({
+      "img_size": new Vector2(560,560),
+      "image": image,
+      "frame_width": 280
+    });
+  }
+
+  frame() {
+    if (this.thrust==true) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   draw(canvas) {
-    canvas.fillStyle = this.color;
-    canvas.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+    this.sprite.render(canvas,this);
   }
 
-  update() {
+  getAcceleration() {
+    var Fx = 0;
+    var Fy = 0;
     if (this.thrust===true) {
-      var res_f = this.t_force - this.mass*globals.g;
+      Fx = Math.sin(this.direction) * globals.thrust*this.mass;
+      Fy = Math.cos(this.direction) * globals.thrust*this.mass -this.mass*globals.g;
+    } else {
+      Fy = -this.mass*globals.g
     }
-    else {
-      var res_f = -this.mass*globals.g;
+    return new Vector2(Fx/this.mass,Fy/this.mass);
+  }
+
+  rotate() {
+    if (this.rotate_left) {
+      this.direction -= 0.1;
+    } else if (this.rotate_right) {
+      this.direction += 0.1;
     }
-    var a = res_f/this.mass;
-    this.velocity.y += a*globals.dt;
-    this.position.y -= this.velocity.y*globals.dt;
+  }
+
+  update(dt) {
+    this.rotate();
+    var a = this.getAcceleration();
+    this.velocity.y += a.y*dt;
+    this.velocity.x += a.x*dt;
+    this.position.y -= this.velocity.y*dt;
+    this.position.x += this.velocity.x*dt;
   }
 
 }
