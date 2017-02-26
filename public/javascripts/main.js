@@ -5,6 +5,7 @@ var key_bind = require('./key_bindings.js');
 var Background = require('./background.js');
 var ImageCache = require('./image_cache.js');
 var Terrain = require('./terrain.js');
+var Enemy = require('./enemy.js');
 var $ = require('jquery');
 var Vector2 = require('./vector2.js');
 var request;
@@ -29,6 +30,10 @@ $.getJSON('./level_data/level01.json',json => {
 
 ship = key_bind(ship);
 
+for (var i = 0; i < globals.num_enemies; i++) {
+  enemyElements.push(new Enemy(canvas));
+}
+
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame
 })();
@@ -51,6 +56,10 @@ function update(dt) {
     cancelRequestAnimFrame(request);
     location.reload(true);
   }
+  enemyElements.forEach(ele => {
+    ele.updateDirection(ship);
+    ele.update(dt);
+  });
   ship.update(dt);
 }
 
@@ -58,6 +67,9 @@ function draw() {
   canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
   bground.draw(canvas);
   terrainElements.forEach(ele => {
+    ele.draw(canvas);
+  });
+  enemyElements.forEach(ele => {
     ele.draw(canvas);
   });
   ship.draw(canvas);

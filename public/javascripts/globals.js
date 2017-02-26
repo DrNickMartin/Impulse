@@ -8,6 +8,7 @@ class Globals {
     this.thrust = 50;
     this.canvas_width = 1680;
     this.canvas_height = 1050;
+    this.num_enemies = 15;
   }
 }
 
