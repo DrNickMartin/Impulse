@@ -12,8 +12,8 @@ module.exports = class Sprite {
     canvas.save();
 
     canvas.translate(
-      obj.position.x+obj.size.x/2,
-      obj.position.y+obj.size.y/2
+      obj.position.x,
+      obj.position.y
     );
 
     canvas.rotate(obj.direction);

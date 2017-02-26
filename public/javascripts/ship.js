@@ -6,10 +6,10 @@ var Vector2 = require('./vector2.js');
 var Sprite = require('./sprite.js');
 
 var ship = class Ship {
-  constructor() {
+  constructor(x, y) {
     this.size = new Vector2(25,50);
-    this.position = new Vector2(50,50);
-    this.velocity = new Vector2(0,20);
+    this.position = new Vector2(x,y);
+    this.velocity = new Vector2(0,0);
     this.direction = 0; //Angle we're facing in radians
     this.color = '#00A';
     this.thrust = false;
