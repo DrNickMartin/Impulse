@@ -80,8 +80,7 @@ module.exports = class Enemy {
     var vmax = this.getMaxVelocity();
     this.velocity.y += a.y*dt;
     this.velocity.x += a.x*dt;
-    var speed = Math.sqrt(this.velocity.x^2 + this.velocity.y^2);
-    if (speed > this.max_speed) {
+    if (Math.abs(this.velocity.x) > Math.abs(vmax.x) || Math.abs(this.velocity.y) > Math.abs(vmax.y)) {
       this.velocity = vmax;
     }
     this.position.y -= this.velocity.y*dt;
