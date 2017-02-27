@@ -25,7 +25,6 @@ module.exports = class Enemy {
     this.isAlive = true;
   }
 
-  // Face towards player...
   updateDirection(ship) {
     var dx = ship.position.x-this.position.x;
     var dy = (-ship.position.y)-(-this.position.y);
