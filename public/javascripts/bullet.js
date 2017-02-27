@@ -4,6 +4,7 @@ module.exports = class Bullet {
   constructor(pos,vel) {
     this.position = pos;
     this.velocity = vel;
+    this.size = 4;
     this.life = 120; // number of timesteps until death
   }
 
@@ -18,7 +19,7 @@ module.exports = class Bullet {
     canvas.arc(
       this.position.x,
       this.position.y,
-      4,
+      this.size,
       0,
       2*Math.PI
     );

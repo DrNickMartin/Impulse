@@ -91,6 +91,13 @@ var ship = class Ship {
         this.position.x + this.size.x > obj.position.x &&
         this.position.y < obj.position.y + obj.size.y &&
         this.size.x + this.position.y > obj.position.y) { this.isAlive = false; }
+      this.bullets.forEach(bullet => {
+        if (
+          bullet.position.x < obj.position.x + obj.size.x/2 &&
+          bullet.position.x > obj.position.x - obj.size.x/2 &&
+          bullet.position.y < obj.position.y + obj.size.y/2 &&
+          bullet.position.y > obj.position.y - obj.size.y/2) { obj.kill(); return; }
+      });
     });
     return false;
   }

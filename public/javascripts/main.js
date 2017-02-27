@@ -34,9 +34,12 @@ $.getJSON('./level_data/level01.json',json => {
 
 ship = key_bind(ship);
 
-for (var i = 0; i < globals.num_enemies; i++) {
-  enemyElements.push(new Enemy(canvas));
+function addEnemies() {
+  while (enemyElements.length < globals.num_enemies) {
+    enemyElements.push(new Enemy(canvas));
+  }
 }
+addEnemies();
 
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame
@@ -60,6 +63,9 @@ function update(dt) {
   ship.checkInBounds();
   ship.checkCollision(enemyElements,terrainElements);
   if (!ship.isAlive) { game_over = true; }
+  // remove dead enemies
+  enemyElements = enemyElements.filter(item => { return item.isAlive; });
+  addEnemies();
 }
 
 function draw() {
