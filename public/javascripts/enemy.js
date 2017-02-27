@@ -22,6 +22,7 @@ module.exports = class Enemy {
     this.position = this.getInitialPosition(canvas, side);
     this.max_speed = getRandomInt(10,20);
     this.velocity = this.getMaxVelocity();
+    this.isAlive = true;
   }
 
   // Face towards player...
@@ -29,6 +30,10 @@ module.exports = class Enemy {
     var dx = ship.position.x-this.position.x;
     var dy = (-ship.position.y)-(-this.position.y);
     this.direction = Math.atan2(dx,dy);
+  }
+
+  kill() {
+    this.isAlive = false;
   }
 
   getMaxVelocity() {
@@ -118,5 +123,4 @@ module.exports = class Enemy {
       );
     }
   }
-
 };
