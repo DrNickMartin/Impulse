@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "watch": "watchify --debug ./public/javascripts/main.js -o ./public/javascripts/bundle.js -v",
+    "watch": "watchify ./public/javascripts/main.js -o ./public/javascripts/bundle.js -v",
     "start": "node ./bin/www",
     "start:dev": "concurrently --kill-others \"npm run watch\" \"npm run start\""
   },
@@ -13,6 +13,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "express": "~4.14.1",
+    "instagram-node": "^0.5.8",
     "jade": "~1.11.0",
     "jquery": "^3.1.1",
     "jquery-hotkeys": "^0.2.1",
