@@ -9,14 +9,17 @@ var Enemy = require('./enemy.js');
 var $ = require('jquery');
 var Vector2 = require('./vector2.js');
 var game_over = false;
+var image_index = 0;
+var searchImages = [];
 
 var canvas = document.getElementById("game_window").getContext('2d');
 canvas.canvas.width = globals.canvas_width;
 canvas.canvas.height = globals.canvas_height;
 
 var start_button = document.getElementById("start");
-start_button.addEventListener("click", animloop);
+start_button.addEventListener("click", start_game);
 start_button.disabled = false;
+var search_text = document.getElementById("search_text").value;
 
 var ship = new Ship(canvas.canvas.width/2,canvas.canvas.height/2);
 var bground = new Background();
@@ -63,9 +66,17 @@ function update(dt) {
   ship.checkInBounds();
   ship.checkCollision(enemyElements,terrainElements);
   if (!ship.isAlive) { game_over = true; }
-  // remove dead enemies
   enemyElements = enemyElements.filter(item => { return item.isAlive; });
   addEnemies();
+  if (searchImages.length > 0) {
+    enemyElements.forEach(ele => {
+      if (!ele.hasImage()) {
+        var img = new Image();
+        img.src = searchImages[getImageIndex()].image.thumbnailLink;
+        ele.addImage(img);
+      }
+    });
+  }
 }
 
 function draw() {
@@ -85,6 +96,20 @@ function endGame(canvas) {
   canvas.fillStyle = '#fff000';
   canvas.textAlign = "center";
   canvas.fillText("Game Over",canvas.canvas.width/2,canvas.canvas.height/2);
+}
+
+function start_game() {
+  $.getJSON('api',{search:search_text},data => {
+    searchImages = data;
+  });
+  animloop();
+}
+
+function getImageIndex() {
+  if(image_index >= searchImages.length) {
+    image_index = 0;
+  }
+  return image_index++;
 }
 
 function animloop(){

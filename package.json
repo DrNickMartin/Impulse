@@ -12,6 +12,7 @@
     "browserify-shim": "^3.8.13",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
+    "dotenv": "^4.0.0",
     "express": "~4.14.1",
     "instagram-node": "^0.5.8",
     "jade": "~1.11.0",
@@ -19,6 +20,7 @@
     "jquery-hotkeys": "^0.2.1",
     "morgan": "~1.7.0",
     "nconf": "^0.8.4",
+    "node-google-image-search": "^1.0.3",
     "nunjucks": "^3.0.0",
     "serve-favicon": "~2.3.2",
     "winston": "^2.3.1"

@@ -74,8 +74,12 @@ module.exports = class Enemy {
     this.image = img;
   }
 
+  hasImage() {
+    return this.image !== undefined
+  }
+
   imageReady() {
-    if (this.image === undefined){ return false; }
+    if (!this.hasImage()){ return false; }
     return isImageOkay(this.image);
   }
 
@@ -111,12 +115,12 @@ module.exports = class Enemy {
     } else {
       canvas.drawImage(
         this.image,
-        this.size.x*this.frame,
         0,
-        this.size.x,
-        this.size.y,
-        this.position.x,
-        this.position.y,
+        0,
+        this.image.naturalWidth,
+        this.image.naturalHeight,
+        this.position.x-this.size.x/2,
+        this.position.y-this.size.y/2,
         this.size.x,
         this.size.y
       );

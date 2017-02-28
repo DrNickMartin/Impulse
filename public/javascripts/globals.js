@@ -9,8 +9,6 @@ class Globals {
     this.canvas_width = 1200;
     this.canvas_height = 600;
     this.num_enemies = 15;
-    this.key = "de9f82f8331a4456a200aebfa065a9de";
-    this.key2 = "d71e42773e494275a30c77a45eba4784";
   }
 }
 
