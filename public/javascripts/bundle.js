@@ -10521,7 +10521,6 @@ canvas.canvas.height = globals.canvas_height;
 var start_button = document.getElementById("start");
 start_button.addEventListener("click", start_game);
 start_button.disabled = false;
-var search_text = document.getElementById("search_text").value;
 
 var ship = new Ship(canvas.canvas.width/2,canvas.canvas.height/2);
 var bground = new Background();
@@ -10601,6 +10600,7 @@ function endGame(canvas) {
 }
 
 function start_game() {
+  var search_text = document.getElementById("search_text").value;
   $.getJSON('api',{search:search_text},data => {
     searchImages = data;
   });
