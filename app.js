@@ -12,7 +12,7 @@ var api = require('./routes/api');
 var privacy = require('./routes/privacy');
 var dotenv = require('dotenv');
 
-dotenv.load();
+//dotenv.load();
 
 var app = express();
 
