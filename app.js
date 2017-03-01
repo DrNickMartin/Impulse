@@ -10,9 +10,7 @@ var nunjucks = require('nunjucks');
 var index = require('./routes/index');
 var api = require('./routes/api');
 var privacy = require('./routes/privacy');
-var dotenv = require('dotenv');
-
-//dotenv.load();
+//var dotenv = require('dotenv').load();
 
 var app = express();
 
